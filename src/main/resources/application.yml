@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    username: root
+    password: oaoj3210
+    url: jdbc:mysql://localhost:3306/shiro
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+#    initialSize: 5
+#    minIdle: 5
+#    maxActive: 20
+#    maxWait: 60000
+#    timeBetweenEvictionRunsMillis: 60000
+#    min
