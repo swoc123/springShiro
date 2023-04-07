@@ -18,7 +18,12 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         System.out.println("execution of doGetAuthorizationInfo");
-        return null;
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User)subject.getPrincipal();
+        simpleAuthorizationInfo.addStringPermission(user.getPerms());
+
+        return simpleAuthorizationInfo;
     }
 
     @Override
@@ -39,7 +44,11 @@ public class UserRealm extends AuthorizingRealm {
         }
 
         System.out.println("execution of doGetAuthenticationInfo");
+        AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user,user.getPwd(),"");
+        Subject subject = SecurityUtils.getSubject();
+        subject.getSession().setAttribute("loginUser",user);
 
-        return new SimpleAuthenticationInfo("",user.getPwd(),""); // shiro will do pwd authentication and pwd is encrypted(customizable)
+        return authenticationInfo;// pass that user(1st para) from DB as principal to do authorization
+        // shiro will do pwd authentication and pwd is encrypted(customizable)
     }
 }

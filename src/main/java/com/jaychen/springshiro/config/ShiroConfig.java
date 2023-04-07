@@ -1,5 +1,6 @@
 package com.jaychen.springshiro.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,11 +30,17 @@ public class ShiroConfig {
         role: have to be that role to access
          */
         Map<String,String> filterChainDefinitionMap = new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/user/add","anon");
-        filterChainDefinitionMap.put("/user/update","authc");
+//        filterChainDefinitionMap.put("/user/add","anon");
+        filterChainDefinitionMap.put("/user/add","perms[user:add]");
+
+        filterChainDefinitionMap.put("/user/update","perms[user:update]");
+        filterChainDefinitionMap.put("/user/*","authc");
+
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         shiroFilterFactoryBean.setLoginUrl("/login");
+
+        shiroFilterFactoryBean.setUnauthorizedUrl("/unAuthorized");
 
 
         return shiroFilterFactoryBean;
@@ -52,5 +59,12 @@ public class ShiroConfig {
     @Bean(name="bad")
     public UserRealm userRealm(){
         return new UserRealm();
+    }
+
+    // for use thymeleaf and shiro together
+
+    @Bean
+    public ShiroDialect getShiroDialect(){
+        return new ShiroDialect();
     }
 }

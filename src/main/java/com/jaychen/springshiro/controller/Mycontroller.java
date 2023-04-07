@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class Mycontroller {
@@ -38,7 +39,7 @@ public class Mycontroller {
         AuthenticationToken token = new UsernamePasswordToken(username,password);
         try {
             subject.login(token);
-            return "success";
+            return "success"; // but normally would go back to the index page
 
         } catch (UnknownAccountException e ){
             model.addAttribute("msg","wrong username");
@@ -55,4 +56,12 @@ public class Mycontroller {
             throw new RuntimeException(e);
         }
     }
+
+    @RequestMapping("/unAuthorized")
+    @ResponseBody
+    public String toUnauthorizedMsg(){
+        return "This action is not authorized";
+    }
+
+    //subjext.logout is logout function
 }
